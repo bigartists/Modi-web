@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { APP_TOKEN } from 'src/configs/globalConstants';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { APP_TOKEN } from 'src/config-global';
 
 const sseUrl = '/modi/v1/pod/log/stream';
 
@@ -30,7 +31,7 @@ export const useGetStreamPodLogs = () => {
       signal: singleControllerInstance.signal,
       body: JSON.stringify(payload),
       openWhenHidden: true,
-      async onopen(resp) {
+      async onopen(resp: any) {
         const contentype = resp.headers.get('content-type') || '';
         console.log('contentype =>', contentype);
         console.log('resp =>', resp);

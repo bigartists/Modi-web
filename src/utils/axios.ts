@@ -1,16 +1,42 @@
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosResponse, AxiosRequestConfig } from 'axios';
 
 import axios from 'axios';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG, APP_TOKEN, BASE_API_URL } from 'src/config-global';
+
+// import { BASE_API_URL, APP_TOKEN } from '@/globalConstants'
+const baseURL = BASE_API_URL;
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
+// const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
+const axiosInstance = axios.create({
+  baseURL,
+  validateStatus(status) {
+    return status < 400; // 约束http status<400 的进入resolved
+  },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')
+  (response) => {
+    refreshToken(response);
+    return response;
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      removeToken();
+      window.location.href = '/auth/jwt/login';
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;
@@ -28,6 +54,13 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
     console.error('Failed to fetch:', error);
     throw error;
   }
+};
+
+export const postFetcher = async (url: string, body: any) => {
+  const res = await axiosInstance.post(url, {
+    ...body,
+  });
+  return res.data;
 };
 
 // ----------------------------------------------------------------------
@@ -59,3 +92,35 @@ export const endpoints = {
     search: '/api/product/search',
   },
 };
+
+function getToken() {
+  return localStorage.getItem(APP_TOKEN);
+}
+
+function refreshToken(response: AxiosResponse) {
+  const token = response.data && response.data && response.data.token;
+  if (token) {
+    setToken(token);
+  }
+}
+
+function setToken(token: string) {
+  localStorage.setItem(APP_TOKEN, token);
+  axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+}
+
+export function removeToken() {
+  localStorage.removeItem(APP_TOKEN);
+  axiosInstance.defaults.headers.common.Authorization = '';
+  delete axiosInstance.defaults.headers.common.Authorization;
+}
+
+export function syncToken(e: StorageEvent) {
+  const { key, newValue } = e;
+  if (key === APP_TOKEN && newValue) {
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${newValue}`;
+  }
+  if (!newValue) {
+    delete axiosInstance.defaults.headers?.common?.Authorization;
+  }
+}

@@ -43,12 +43,21 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
-    two: `${ROOTS.DASHBOARD}/two`,
-    three: `${ROOTS.DASHBOARD}/three`,
-    group: {
-      root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
+    deployment: {
+      root: `${ROOTS.DASHBOARD}/deployment`,
+      list: `${ROOTS.DASHBOARD}/deployment/list`,
+      info: `${ROOTS.DASHBOARD}/deployment/info`,
+    },
+    pod: `${ROOTS.DASHBOARD}/pod`,
+    service: `${ROOTS.DASHBOARD}/service`,
+
+    configmap: `${ROOTS.DASHBOARD}/configmap`,
+    secret: `${ROOTS.DASHBOARD}/secret`,
+
+    app: {
+      root: `${ROOTS.DASHBOARD}/app`,
+      list: `${ROOTS.DASHBOARD}/app/list`,
+      info: `${ROOTS.DASHBOARD}/app/info`,
     },
   },
 };

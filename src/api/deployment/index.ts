@@ -1,10 +1,10 @@
+import type { IDeploymentItem, IPodItem } from 'src/types/deployment';
+
 import useSWR from 'swr';
 import { useMemo } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import { fetcher, postFetcher } from 'src/utils/axios';
-
-import { IPodItem, IDeploymentItem } from 'src/pages/Deployment/type';
 
 export const useGetDeployments = (params: any) => {
   const URL = '/deployments';

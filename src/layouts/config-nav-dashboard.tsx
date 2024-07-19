@@ -46,27 +46,56 @@ export const navData = [
    * Overview
    */
   {
-    subheader: 'Overview 6.0.0',
+    subheader: 'Workload',
     items: [
-      { title: 'One', path: paths.dashboard.root, icon: ICONS.dashboard },
-      { title: 'Two', path: paths.dashboard.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: paths.dashboard.three, icon: ICONS.analytics },
+      { title: 'Dashboard', path: paths.dashboard.root, icon: ICONS.course },
+      {
+        title: 'Deployment',
+        path: paths.dashboard.deployment.root,
+        icon: ICONS.ecommerce,
+        children: [
+          {
+            title: 'List',
+            path: paths.dashboard.deployment.list,
+          },
+          {
+            title: 'Info',
+            path: paths.dashboard.deployment.info,
+          },
+        ],
+      },
+      { title: 'Pod', path: paths.dashboard.pod, icon: ICONS.analytics },
+      { title: 'Service', path: paths.dashboard.service, icon: ICONS.dashboard },
     ],
   },
   /**
    * Management
    */
   {
-    subheader: 'Management',
+    subheader: 'Storage',
     items: [
       {
-        title: 'Group',
-        path: paths.dashboard.group.root,
+        title: 'ConfigMap',
+        path: paths.dashboard.configmap,
+        icon: ICONS.folder,
+      },
+      {
+        title: 'Secret',
+        path: paths.dashboard.secret,
+        icon: ICONS.kanban,
+      },
+    ],
+  },
+  {
+    subheader: 'Application',
+    items: [
+      {
+        title: 'Application',
+        path: paths.dashboard.app.root,
         icon: ICONS.user,
         children: [
-          { title: 'Four', path: paths.dashboard.group.root },
-          { title: 'Five', path: paths.dashboard.group.five },
-          { title: 'Six', path: paths.dashboard.group.six },
+          { title: 'List', path: paths.dashboard.app.list },
+          { title: 'Info', path: paths.dashboard.app.info },
         ],
       },
     ],

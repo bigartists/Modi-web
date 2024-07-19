@@ -1,10 +1,10 @@
+import type { ISecret } from 'src/types/secret';
+
 import useSWR from 'swr';
 import { useMemo } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import { fetcher, postFetcher } from 'src/utils/axios';
-
-import { ISecret } from 'src/pages/Secret/type';
 
 export const useGetSecrets = (params: any) => {
   const URL = '/secret';
