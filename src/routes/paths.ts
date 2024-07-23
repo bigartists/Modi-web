@@ -1,5 +1,8 @@
 // ----------------------------------------------------------------------
-
+export const _id = [...Array(40)].map(
+  (_, index) => `e99f09a7-dd88-49d5-b1c8-1daf80c2d7b${index + 1}`
+);
+const MOCK_ID = _id[1];
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
@@ -45,19 +48,37 @@ export const paths = {
     root: ROOTS.DASHBOARD,
     deployment: {
       root: `${ROOTS.DASHBOARD}/deployment`,
-      list: `${ROOTS.DASHBOARD}/deployment/list`,
-      info: `${ROOTS.DASHBOARD}/deployment/info`,
+      details: (ns: string, name: string) => `${ROOTS.DASHBOARD}/deployment/${ns}/${name}`,
+      new: `${ROOTS.DASHBOARD}/deployment/new`,
     },
-    pod: `${ROOTS.DASHBOARD}/pod`,
+    pod: {
+      root: `${ROOTS.DASHBOARD}/pod`,
+      details: (ns: string, name: string) => `${ROOTS.DASHBOARD}/pod/${ns}/${name}`,
+    },
     service: `${ROOTS.DASHBOARD}/service`,
 
     configmap: `${ROOTS.DASHBOARD}/configmap`,
-    secret: `${ROOTS.DASHBOARD}/secret`,
+    secret: {
+      root: `${ROOTS.DASHBOARD}/secret`,
+      new: `${ROOTS.DASHBOARD}/secret/new`,
+      // details: (id: string) => `${ROOTS.DASHBOARD}/secret/${id}`,
+      // edit: (id: string) => `${ROOTS.DASHBOARD}/secret/${id}/edit`,
+    },
 
     app: {
       root: `${ROOTS.DASHBOARD}/app`,
       list: `${ROOTS.DASHBOARD}/app/list`,
       info: `${ROOTS.DASHBOARD}/app/info`,
+    },
+    product: {
+      root: `${ROOTS.DASHBOARD}/product`,
+      new: `${ROOTS.DASHBOARD}/product/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/product/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/product/${id}/edit`,
+      demo: {
+        details: `${ROOTS.DASHBOARD}/product/${MOCK_ID}`,
+        edit: `${ROOTS.DASHBOARD}/product/${MOCK_ID}/edit`,
+      },
     },
   },
 };

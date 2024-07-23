@@ -56,16 +56,33 @@ export const navData = [
         children: [
           {
             title: 'List',
-            path: paths.dashboard.deployment.list,
-          },
-          {
-            title: 'Info',
-            path: paths.dashboard.deployment.info,
+            path: paths.dashboard.deployment.root,
           },
         ],
       },
-      { title: 'Pod', path: paths.dashboard.pod, icon: ICONS.analytics },
+      {
+        title: 'Pod',
+        path: paths.dashboard.pod.root,
+        icon: ICONS.analytics,
+        children: [
+          {
+            title: 'List',
+            path: paths.dashboard.pod.root,
+          },
+        ],
+      },
       { title: 'Service', path: paths.dashboard.service, icon: ICONS.dashboard },
+      {
+        title: 'Product',
+        path: paths.dashboard.product.root,
+        icon: ICONS.product,
+        children: [
+          { title: 'List', path: paths.dashboard.product.root },
+          { title: 'Details', path: paths.dashboard.product.demo.details },
+          { title: 'Create', path: paths.dashboard.product.new },
+          { title: 'Edit', path: paths.dashboard.product.demo.edit },
+        ],
+      },
     ],
   },
   /**
@@ -81,8 +98,12 @@ export const navData = [
       },
       {
         title: 'Secret',
-        path: paths.dashboard.secret,
+        path: paths.dashboard.secret.root,
         icon: ICONS.kanban,
+        children: [
+          { title: 'List', path: paths.dashboard.secret.root },
+          { title: 'New', path: paths.dashboard.secret.new },
+        ],
       },
     ],
   },

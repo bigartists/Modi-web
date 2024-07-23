@@ -1,5 +1,4 @@
 import type { Dayjs, OpUnitType } from 'dayjs';
-
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -28,7 +27,25 @@ export const formatStr = {
     dateTime: 'DD-MM-YYYY h:mm a', // 17-04-2022 12:00 am
     date: 'DD-MM-YYYY', // 17-04-2022
   },
+  zn: {
+    dateTime: 'YYYY-MM-DD HH:mm:ss', // 2022-04-17 00:00:00
+    date: 'YYYY-MM-DD', // 2022-04-17
+  },
 };
+
+export function fDataTimeZn(date: DatePickerFormat, format?: string) {
+  if (!date) {
+    return null;
+  }
+
+  const isValid = dayjs(date).isValid();
+
+  return isValid
+    ? dayjs(date)
+        .endOf('day')
+        .format(format ?? formatStr.zn.dateTime)
+    : 'Invalid time value';
+}
 
 export function today(format?: string) {
   return dayjs(new Date()).startOf('day').format(format);
@@ -62,6 +79,16 @@ export function fDate(date: DatePickerFormat, format?: string) {
   return isValid ? dayjs(date).format(format ?? formatStr.date) : 'Invalid time value';
 }
 
+export function fDateZn(date: DatePickerFormat, format?: string) {
+  if (!date) {
+    return null;
+  }
+
+  const isValid = dayjs(date).isValid();
+
+  return isValid ? dayjs(date).format(format ?? formatStr.zn.date) : 'Invalid time value';
+}
+
 // ----------------------------------------------------------------------
 
 /** output: 12:00 am
@@ -74,6 +101,16 @@ export function fTime(date: DatePickerFormat, format?: string) {
   const isValid = dayjs(date).isValid();
 
   return isValid ? dayjs(date).format(format ?? formatStr.time) : 'Invalid time value';
+}
+
+export function fTimeZn(date: DatePickerFormat, format?: string) {
+  if (!date) {
+    return null;
+  }
+
+  const isValid = dayjs(date).isValid();
+
+  return isValid ? dayjs(date).format(format ?? 'HH:mm:ss') : 'Invalid time value';
 }
 
 // ----------------------------------------------------------------------

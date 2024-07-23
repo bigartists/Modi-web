@@ -12,8 +12,10 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { CONFIG } from 'src/config-global';
 import { _contacts, _notifications } from 'src/_mock';
 import { varAlpha, stylesMode } from 'src/theme/styles';
+import { useGetNamespaces } from 'src/actions/namespace';
 
 import { bulletColor } from 'src/components/nav-section';
 import { useSettingsContext } from 'src/components/settings';
@@ -45,6 +47,7 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
   const mobileNavOpen = useBoolean();
 
   const settings = useSettingsContext();
+  const { namespaces, namespacesLoading } = useGetNamespaces();
 
   const navColorVars = useNavColorVars(theme, settings);
 
@@ -57,6 +60,17 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
   const isNavHorizontal = settings.navLayout === 'horizontal';
 
   const isNavVertical = isNavMini || settings.navLayout === 'vertical';
+
+  const formatNamespaces = useMemo(
+    () =>
+      namespaces.map((namespace) => ({
+        id: namespace,
+        name: namespace,
+        logo: `${CONFIG.site.basePath}/assets/icons/workspaces/logo-3.webp`,
+        plan: 'Namespace',
+      })),
+    [namespaces]
+  );
 
   return (
     <>
@@ -87,7 +101,8 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
               ],
               account: _account,
               contacts: _contacts,
-              workspaces: _workspaces,
+              // workspaces: _workspaces,
+              workspaces: formatNamespaces,
               notifications: _notifications,
             }}
             slotsDisplay={{
@@ -184,7 +199,7 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
           '--layout-nav-vertical-width': '300px',
           '--layout-nav-horizontal-height': '64px',
           '--layout-dashboard-content-pt': theme.spacing(1),
-          '--layout-dashboard-content-pb': theme.spacing(8),
+          '--layout-dashboard-content-pb': theme.spacing(5),
           '--layout-dashboard-content-px': theme.spacing(5),
         }}
         sx={{

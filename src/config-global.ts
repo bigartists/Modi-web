@@ -44,7 +44,7 @@ export const APP_TOKEN = 'APP_TOKEN';
 
 export const CONFIG: ConfigValue = {
   site: {
-    name: 'Minimals',
+    name: 'Modi',
     serverUrl: process.env.NEXT_PUBLIC_SERVER_URL ?? '',
     assetURL: process.env.NEXT_PUBLIC_ASSET_URL ?? '',
     basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
@@ -102,3 +102,5 @@ export const CONFIG: ConfigValue = {
     key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
   },
 };
+
+export const DEFAULTPAGINATIONPAGESIZE = 25;

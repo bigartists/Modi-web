@@ -1,11 +1,11 @@
 import { CONFIG } from 'src/config-global';
 
-import { BlankView } from 'src/sections/blank/view';
+import { PodListView } from 'src/sections/pod/view';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `Page three | Dashboard - ${CONFIG.site.name}` };
+export const metadata = { title: `Pod list | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
-  return <BlankView title="Page pod" />;
+  return <PodListView />;
 }
