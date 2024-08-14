@@ -57,7 +57,12 @@ export const paths = {
     },
     service: `${ROOTS.DASHBOARD}/service`,
 
-    configmap: `${ROOTS.DASHBOARD}/configmap`,
+    configmap: {
+      root: `${ROOTS.DASHBOARD}/configmap`,
+      new: `${ROOTS.DASHBOARD}/configmap/new`,
+      // details: (id: string) => `${ROOTS.DASHBOARD}/configmap/${id}`,
+      // edit: (id: string) => `${ROOTS.DASHBOARD}/configmap/${id}/edit`,
+    },
     secret: {
       root: `${ROOTS.DASHBOARD}/secret`,
       new: `${ROOTS.DASHBOARD}/secret/new`,

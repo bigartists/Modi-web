@@ -93,8 +93,12 @@ export const navData = [
     items: [
       {
         title: 'ConfigMap',
-        path: paths.dashboard.configmap,
+        path: paths.dashboard.configmap.root,
         icon: ICONS.folder,
+        children: [
+          { title: 'List', path: paths.dashboard.configmap.root },
+          { title: 'New', path: paths.dashboard.configmap.new },
+        ],
       },
       {
         title: 'Secret',
