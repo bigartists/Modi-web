@@ -10,6 +10,8 @@ import { defaultFont } from 'src/theme/core/typography';
 import { SettingsDrawerProps, useSettingsContext } from 'src/components/settings';
 import { FontOptions } from 'src/components/settings/drawer/font-options';
 import { Scrollbar } from 'src/components/scrollbar';
+import { Box, Typography, Tooltip, Badge, IconButton  } from '@mui/material';
+import { Iconify } from 'src/components/iconify';
 
 // import { Scrollbar } from '../../scrollbar';
 // import { FontOptions } from './font-options';
@@ -19,8 +21,23 @@ import { Scrollbar } from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export function PodDrawer({ children, open, onClose }: any) {
+export function PodDrawer({ children, open, onClose, title }: any) {
+  console.log("podname====",title)
   const theme = useTheme();
+
+  const renderHead = (
+    <Box display="flex" alignItems="center" sx={{ py: 2, pr: 1, pl: 2.5 }}>
+      <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        {title? title : ''}
+      </Typography>
+
+      <Tooltip title="Close">
+        <IconButton  onClick={onClose}>
+          <Iconify icon="mingcute:close-line" />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
 
   return (
     <Drawer
@@ -40,8 +57,9 @@ export function PodDrawer({ children, open, onClose }: any) {
         },
       }}
     >
+      {renderHead}
       <Scrollbar>
-        <Stack spacing={6} sx={{ p: 2.5, pb: 5 }}>
+        <Stack spacing={6} >
           {children}
         </Stack>
       </Scrollbar>

@@ -28,6 +28,7 @@ import { Iconify } from 'src/components/iconify';
 import { RenderCellNsName, RenderCellStatus } from './product-table-row';
 import { PodDrawer } from './components/podDrawer';
 import Log from './log';
+import Shell from './shell'
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +44,8 @@ export function ContainerList({ containers, namespace, podname }: any) {
 
   const [tableData, setTableData] = useState<IProductItem[]>([]);
   const [showDrawer, setDrawerVisbile] = useState<boolean>(false);
+  
+  const showShellDrawer = useBoolean();
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
@@ -59,6 +62,11 @@ export function ContainerList({ containers, namespace, podname }: any) {
     setCName(name);
     setDrawerVisbile(true);
   }, []);
+
+  const showShell = useCallback((name: string) => {
+    setCName(name);
+    showShellDrawer.onTrue()
+  },[])
 
   const columns: GridColDef[] = [
     {
@@ -89,16 +97,16 @@ export function ContainerList({ containers, namespace, podname }: any) {
       getActions: (params) => [
         <GridActionsCellItem
           showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="Show Logs"
+          icon={<Iconify icon="solar:documents-bold-duotone" />} 
+          label="View Logs"
           onClick={() => showLogs(params.row.name)}
         />,
-        // <GridActionsCellItem
-        //   showInMenu
-        //   icon={<Iconify icon="solar:pen-bold" />}
-        //   label="Edit"
-        //   onClick={() => handleEditRow(params.row.Name)}
-        // />,
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:clapperboard-edit-bold" />}
+          label="Execute Shell"
+          onClick={() => showShell(params.row.Name)}
+        />,
         // <GridActionsCellItem
         //   showInMenu
         //   icon={<Iconify icon="solar:trash-bin-trash-bold" />}
@@ -137,6 +145,10 @@ export function ContainerList({ containers, namespace, podname }: any) {
       />
       <PodDrawer open={showDrawer} onClose={() => setDrawerVisbile(false)}>
         {showDrawer && <Log namespace={namespace} podname={podname} containerName={currentCName} />}
+      </PodDrawer>
+
+      <PodDrawer open={showShellDrawer.value} onClose={showShellDrawer.onFalse} title={podname}>
+        {showShellDrawer.value && <Shell namespace={namespace} podname={podname} containerName={currentCName} />}
       </PodDrawer>
     </Card>
   );
