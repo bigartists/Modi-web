@@ -22,7 +22,6 @@ import { Iconify } from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export function PodDrawer({ children, open, onClose, title }: any) {
-  console.log("podname====",title)
   const theme = useTheme();
 
   const renderHead = (

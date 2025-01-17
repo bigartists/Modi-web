@@ -89,30 +89,28 @@ export const Terminal = forwardRef<TerminalRef, TerminalProps>(
 
     
 
-      ws.onmessage = (event) => {
-        
+      ws.onmessage = async (event) => {
         if (event.data) {
-          try {
-            const output = event.data.toString();
-            const lastCommand = inputBufferRef.current.trim();
+          try { 
+            let outputText: string;
             
-            // 如果输出以最后的命令开头，移除它
-            let processedOutput = output;
-            if (lastCommand && output.trim().startsWith(lastCommand)) {
-              const lines = output.split('\n');
-              if (lines[0].trim() === lastCommand) {
-                processedOutput = lines.slice(1).join('\n');
-              }
+            if (event.data instanceof Blob) {
+              outputText = await event.data.text();
+            } else if (typeof event.data === 'string' && event.data.startsWith('{')) {
+              const jsonData = JSON.parse(event.data);
+              outputText = jsonData.data || jsonData.message || event.data;
+              console.log('JSON content:', outputText);
+            } else {
+              outputText = event.data.toString();
+              console.log('String content:', outputText);
             }
             
-            if (processedOutput.trim()) {
-              terminal.write(processedOutput);
-              if (!processedOutput.endsWith('\r\n')) {
-                // terminal.write('\r\n');
-              }
-            }
+            // 写入终端
+            terminal.write(outputText);
+            
+         
           } catch (error) {
-            console.error('Error writing to terminal:', error);
+            console.error('Error processing terminal output:', error);
             terminal.write('\r\nError displaying output\r\n');
           }
         }
@@ -133,45 +131,14 @@ export const Terminal = forwardRef<TerminalRef, TerminalProps>(
           return;
         }
 
-        // 忽略转义序列
-        if (data.startsWith('\x1b')) {
-          return;
+        try {
+          ws.send(data)
+        } catch (error) {
+          console.error(error)
         }
+     
 
-        if (data === '\r') {
-          const command = inputBufferRef.current.trim();
-          if (!command) {  // 忽略空命令
-            resetTerminalState();
-            return;
-          }
-
-          try {
-            if (command.toLowerCase() === 'clear') {
-              terminal.clear();
-              resetTerminalState();
-            } else {
-              console.log('Sending command:', command);  // 调试日志
-              ws.send(command);
-              resetTerminalState();
-            }
-          } catch (error) {
-            console.error('Failed to send command:', error);
-            terminal.write('\r\nFailed to send command\r\n');
-            resetTerminalState();
-          }
-        } else if (data === '\u007f') {
-          // ... backspace handling ...
-          if (inputBufferRef.current.length > 0) {
-            inputBufferRef.current = inputBufferRef.current.slice(0, -1);
-            terminal.write('\b \b');
-          }
-        } else {
-          // 只处理可打印字符
-          if (data >= ' ' && data <= '~') {
-            inputBufferRef.current += data;
-            terminal.write(data);
-          }
-        }
+     
       });
 
       const resizeObserver = new ResizeObserver(() => {
